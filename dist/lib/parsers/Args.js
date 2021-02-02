@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Args = void 0;
+const pieces_1 = require("@sapphire/pieces");
 const ArgumentError_1 = require("../errors/ArgumentError");
 const UserError_1 = require("../errors/UserError");
 const Maybe_1 = require("./Maybe");
@@ -221,7 +222,7 @@ class Args {
     resolveArgument(arg) {
         if (typeof arg === 'object')
             return arg;
-        return this.message.client.arguments.get(arg);
+        return pieces_1.Store.injectedContext.stores.get('arguments').get(arg);
     }
     /**
      * Converts a callback into an usable argument.

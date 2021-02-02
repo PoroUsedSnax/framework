@@ -37,6 +37,7 @@ __exportStar(require("./lib/structures/EventStore"), exports);
 __exportStar(require("./lib/structures/ExtendedArgument"), exports);
 __exportStar(require("./lib/structures/Precondition"), exports);
 __exportStar(require("./lib/structures/PreconditionStore"), exports);
+__exportStar(require("./lib/structures/StoreRegistry"), exports);
 __exportStar(require("./lib/types/Enums"), exports);
 __exportStar(require("./lib/types/Events"), exports);
 __exportStar(require("./lib/utils/logger/ILogger"), exports);

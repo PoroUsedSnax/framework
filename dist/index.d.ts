@@ -4,6 +4,7 @@ export { AliasPiece, AliasPieceOptions, AliasStore, Awaited, LoaderError, Missin
 import { Message, Collection, CategoryChannel, Channel, DMChannel, GuildChannel, GuildMember, NewsChannel, Role, TextChannel, User, VoiceChannel, ClientOptions, ClientEvents, Client, PermissionResolvable } from 'discord.js';
 import { Ok as Ok$1, Err as Err$1, UnorderedStrategy, Lexer, option, Args as Args$1 } from 'lexure';
 import { URL } from 'url';
+import Collection$1 from '@discordjs/collection';
 import { EventEmitter } from 'events';
 
 /**
@@ -1385,6 +1386,84 @@ declare class PreconditionStore extends Store<Precondition> {
     constructor();
 }
 
+declare type Key = keyof StoreRegistryEntries;
+declare type Value = StoreRegistryEntries[Key];
+/**
+ * A strict-typed store registry. This is available in both [[Client.stores]] and [[Store.injectedContext]].
+ * @since 1.0.0
+ * @example
+ * ```typescript
+ * // Adding new stores
+ *
+ * // Register the store:
+ * Store.injectedContext.stores.register(new RouteStore());
+ *
+ * // Augment Sapphire to add the new store, in case of a JavaScript
+ * // project, this can be moved to an `Augments.d.ts` (or any other name)
+ * // file somewhere:
+ * declare module '(at)sapphire/framework' {
+ *   export interface StoreRegistryEntries {
+ *     routes: RouteStore;
+ *   }
+ * }
+ * ```
+ */
+declare class StoreRegistry extends Collection$1<Key, Value> {
+    /**
+     * Registers all user directories from the process working directory, the default value is obtained by assuming
+     * CommonJS (high accuracy) but with fallback for ECMAScript Modules (reads package.json's `main` entry, fallbacks
+     * to `process.cwd()`).
+     *
+     * By default, if you have this folder structure:
+     * ```
+     * /home/me/my-bot
+     * ├─ src
+     * │  ├─ commands
+     * │  ├─ events
+     * │  └─ main.js
+     * └─ package.json
+     * ```
+     *
+     * And you run `node src/main.js`, the directories `/home/me/my-bot/src/commands` and `/home/me/my-bot/src/events` will
+     * be registered for the commands and events stores respectively, since both directories are located in the same
+     * directory as your main file.
+     *
+     * **Note**: this also registers directories for all other stores, even if they don't have a folder, this allows you
+     * to create new pieces and hot-load them later anytime.
+     * @since 1.0.0
+     * @param rootDirectory The root directory to register pieces at.
+     */
+    registerUserDirectories(rootDirectory?: string): void;
+    /**
+     * Registers a store.
+     * @since 1.0.0
+     * @param store The store to register.
+     */
+    register<T extends Piece>(store: Store<T>): this;
+    /**
+     * Deregisters a store.
+     * @since 1.0.0
+     * @param store The store to deregister.
+     */
+    deregister<T extends Piece>(store: Store<T>): this;
+}
+interface StoreRegistry {
+    get<K extends Key>(key: K): StoreRegistryEntries[K];
+    get(key: string): undefined;
+    has(key: Key): true;
+    has(key: string): false;
+}
+/**
+ * The [[StoreRegistry]]'s registry, use module augmentation against this interface when adding new stores.
+ * @since 1.0.0
+ */
+interface StoreRegistryEntries {
+    arguments: ArgumentStore;
+    commands: CommandStore;
+    events: EventStore;
+    preconditions: PreconditionStore;
+}
+
 /**
  * The logger levels for the [[ILogger]].
  */
@@ -1616,66 +1695,11 @@ declare class SapphireClient extends Client {
      */
     logger: ILogger;
     /**
-     * The arguments the framework has registered.
-     * @since 1.0.0
-     */
-    arguments: ArgumentStore;
-    /**
-     * The commands the framework has registered.
-     * @since 1.0.0
-     */
-    commands: CommandStore;
-    /**
-     * The events the framework has registered.
-     * @since 1.0.0
-     */
-    events: EventStore;
-    /**
-     * The precondition the framework has registered.
-     * @since 1.0.0
-     */
-    preconditions: PreconditionStore;
-    /**
      * The registered stores.
      * @since 1.0.0
      */
-    stores: Set<Store<Piece>>;
+    stores: StoreRegistry;
     constructor(options?: ClientOptions);
-    /**
-     * Registers all user directories from the process working directory, the default value is obtained by assuming
-     * CommonJS (high accuracy) but with fallback for ECMAScript Modules (reads package.json's `main` entry, fallbacks
-     * to `process.cwd()`).
-     *
-     * By default, if you have this folder structure:
-     * ```
-     * /home/me/my-bot
-     * ├─ src
-     * │  ├─ commands
-     * │  ├─ events
-     * │  └─ main.js
-     * └─ package.json
-     * ```
-     *
-     * And you run `node src/main.js`, the directories `/home/me/my-bot/src/commands` and `/home/me/my-bot/src/events` will
-     * be registered for the commands and events stores respectively, since both directories are located in the same
-     * directory as your main file.
-     *
-     * **Note**: this also registers directories for all other stores, even if they don't have a folder, this allows you
-     * to create new pieces and hot-load them later anytime.
-     * @param rootDirectory The root directory to register pieces at.
-     */
-    registerUserDirectories(rootDirectory?: string): void;
-    /**
-     * Registers a store.
-     * @param store The store to register.
-     */
-    registerStore<T extends Piece>(store: Store<T>): this;
-    /**
-     * Deregisters a store.
-     * @since 1.0.0
-     * @param store The store to deregister.
-     */
-    deregisterStore<T extends Piece>(store: Store<T>): this;
     /**
      * Loads all pieces, then logs the client in, establishing a websocket connection to Discord.
      * @since 1.0.0
@@ -1694,10 +1718,7 @@ declare module 'discord.js' {
     interface Client {
         id: string | null;
         logger: ILogger;
-        arguments: ArgumentStore;
-        commands: CommandStore;
-        events: EventStore;
-        preconditions: PreconditionStore;
+        stores: StoreRegistry;
         fetchPrefix: SapphirePrefixHook;
     }
     interface ClientOptions extends SapphireClientOptions {
@@ -1707,6 +1728,7 @@ declare module '@sapphire/pieces' {
     interface PieceContextExtras {
         client: SapphireClient;
         logger: ILogger;
+        stores: StoreRegistry;
     }
 }
 
@@ -1973,4 +1995,4 @@ declare class PermissionsPrecondition implements PreconditionSingleResolvableDet
     constructor(permissions: PermissionResolvable);
 }
 
-export { ArgOptions, ArgType, Args, ArgsNextCallback, Argument, ArgumentContext, ArgumentError, ArgumentOptions, ArgumentResult, ArgumentStore, AsyncArgumentResult, AsyncPluginHooks, AsyncPreconditionContainerReturn, AsyncPreconditionResult, BucketType, ClientLoggerOptions, Command, CommandAcceptedPayload, CommandContext, CommandDeniedPayload, CommandErrorPayload, CommandOptions, CommandStore, CommandSuccessPayload, CooldownLevel, Err, Event, EventErrorPayload, EventOptions, EventStore, Events, ExtendedArgument, ExtendedArgumentContext, ExtendedArgumentOptions, IArgument, ICommandPayload, ILogger, IPieceError, IPreconditionCondition, IPreconditionContainer, LogLevel, LogMethods, Logger, Maybe, None, Ok, PermissionsPrecondition, Plugin, PluginHook, PluginManager, PreCommandRunPayload, Precondition, PreconditionArrayResolvable, PreconditionArrayResolvableDetails, PreconditionConditionAnd, PreconditionConditionOr, PreconditionContainerArray, PreconditionContainerResult, PreconditionContainerReturn, PreconditionContainerSingle, PreconditionContext, PreconditionEntryResolvable, PreconditionError, PreconditionResult, PreconditionRunCondition, PreconditionRunMode, PreconditionSingleResolvable, PreconditionSingleResolvableDetails, PreconditionStore, RepeatArgOptions, Result, SapphireClient, SapphireClientOptions, SapphirePluginAsyncHook, SapphirePluginHook, SapphirePluginHookEntry, SapphirePrefix, SapphirePrefixHook, Some, SyncPluginHooks, UserError, err, isErr, isMaybe, isNone, isOk, isSome, maybe, none, ok, postInitialization, postLogin, preGenericsInitialization, preInitialization, preLogin, some };
+export { ArgOptions, ArgType, Args, ArgsNextCallback, Argument, ArgumentContext, ArgumentError, ArgumentOptions, ArgumentResult, ArgumentStore, AsyncArgumentResult, AsyncPluginHooks, AsyncPreconditionContainerReturn, AsyncPreconditionResult, BucketType, ClientLoggerOptions, Command, CommandAcceptedPayload, CommandContext, CommandDeniedPayload, CommandErrorPayload, CommandOptions, CommandStore, CommandSuccessPayload, CooldownLevel, Err, Event, EventErrorPayload, EventOptions, EventStore, Events, ExtendedArgument, ExtendedArgumentContext, ExtendedArgumentOptions, IArgument, ICommandPayload, ILogger, IPieceError, IPreconditionCondition, IPreconditionContainer, LogLevel, LogMethods, Logger, Maybe, None, Ok, PermissionsPrecondition, Plugin, PluginHook, PluginManager, PreCommandRunPayload, Precondition, PreconditionArrayResolvable, PreconditionArrayResolvableDetails, PreconditionConditionAnd, PreconditionConditionOr, PreconditionContainerArray, PreconditionContainerResult, PreconditionContainerReturn, PreconditionContainerSingle, PreconditionContext, PreconditionEntryResolvable, PreconditionError, PreconditionResult, PreconditionRunCondition, PreconditionRunMode, PreconditionSingleResolvable, PreconditionSingleResolvableDetails, PreconditionStore, RepeatArgOptions, Result, SapphireClient, SapphireClientOptions, SapphirePluginAsyncHook, SapphirePluginHook, SapphirePluginHookEntry, SapphirePrefix, SapphirePrefixHook, Some, StoreRegistry, StoreRegistryEntries, SyncPluginHooks, UserError, err, isErr, isMaybe, isNone, isOk, isSome, maybe, none, ok, postInitialization, postLogin, preGenericsInitialization, preInitialization, preLogin, some };

@@ -59,7 +59,7 @@ class ExtendedArgument extends Argument_1.Argument {
      * into the value used to compute the extended argument's value.
      */
     get base() {
-        return this.context.client.arguments.get(this.baseArgument);
+        return this.context.stores.get('arguments').get(this.baseArgument);
     }
     async run(parameter, context) {
         const result = await this.base.run(parameter, context);

@@ -9,6 +9,7 @@ const ArgumentStore_1 = require("./structures/ArgumentStore");
 const CommandStore_1 = require("./structures/CommandStore");
 const EventStore_1 = require("./structures/EventStore");
 const PreconditionStore_1 = require("./structures/PreconditionStore");
+const StoreRegistry_1 = require("./structures/StoreRegistry");
 require("./types/Enums");
 const Events_1 = require("./types/Events");
 require("./utils/logger/ILogger");
@@ -73,72 +74,25 @@ class SapphireClient extends discord_js_1.Client {
         }
         this.logger = (_b = (_a = options.logger) === null || _a === void 0 ? void 0 : _a.instance) !== null && _b !== void 0 ? _b : new Logger_1.Logger((_d = (_c = options.logger) === null || _c === void 0 ? void 0 : _c.level) !== null && _d !== void 0 ? _d : 30 /* Info */);
         pieces_1.Store.injectedContext.logger = this.logger;
+        this.stores = new StoreRegistry_1.StoreRegistry();
+        pieces_1.Store.injectedContext.stores = this.stores;
         this.fetchPrefix = (_e = options.fetchPrefix) !== null && _e !== void 0 ? _e : (() => { var _a; return (_a = this.options.defaultPrefix) !== null && _a !== void 0 ? _a : null; });
         for (const plugin of SapphireClient.plugins.values("preInitialization" /* PreInitialization */)) {
             plugin.hook.call(this, options);
             this.emit(Events_1.Events.PluginLoaded, plugin.type, plugin.name);
         }
         this.id = (_f = options.id) !== null && _f !== void 0 ? _f : null;
-        this.arguments = new ArgumentStore_1.ArgumentStore().registerPath(path_1.join(__dirname, '..', 'arguments'));
-        this.commands = new CommandStore_1.CommandStore();
-        this.events = new EventStore_1.EventStore().registerPath(path_1.join(__dirname, '..', 'events'));
-        this.preconditions = new PreconditionStore_1.PreconditionStore().registerPath(path_1.join(__dirname, '..', 'preconditions'));
+        this.stores
+            .register(new ArgumentStore_1.ArgumentStore().registerPath(path_1.join(__dirname, '..', 'arguments'))) //
+            .register(new CommandStore_1.CommandStore())
+            .register(new EventStore_1.EventStore().registerPath(path_1.join(__dirname, '..', 'events')))
+            .register(new PreconditionStore_1.PreconditionStore().registerPath(path_1.join(__dirname, '..', 'preconditions')));
         if (options.loadDefaultErrorEvents !== false)
-            this.events.registerPath(path_1.join(__dirname, '..', 'errorEvents'));
-        this.stores = new Set();
-        this.registerStore(this.arguments) //
-            .registerStore(this.commands)
-            .registerStore(this.events)
-            .registerStore(this.preconditions);
+            this.stores.get('events').registerPath(path_1.join(__dirname, '..', 'errorEvents'));
         for (const plugin of SapphireClient.plugins.values("postInitialization" /* PostInitialization */)) {
             plugin.hook.call(this, options);
             this.emit(Events_1.Events.PluginLoaded, plugin.type, plugin.name);
         }
-    }
-    /**
-     * Registers all user directories from the process working directory, the default value is obtained by assuming
-     * CommonJS (high accuracy) but with fallback for ECMAScript Modules (reads package.json's `main` entry, fallbacks
-     * to `process.cwd()`).
-     *
-     * By default, if you have this folder structure:
-     * ```
-     * /home/me/my-bot
-     * ├─ src
-     * │  ├─ commands
-     * │  ├─ events
-     * │  └─ main.js
-     * └─ package.json
-     * ```
-     *
-     * And you run `node src/main.js`, the directories `/home/me/my-bot/src/commands` and `/home/me/my-bot/src/events` will
-     * be registered for the commands and events stores respectively, since both directories are located in the same
-     * directory as your main file.
-     *
-     * **Note**: this also registers directories for all other stores, even if they don't have a folder, this allows you
-     * to create new pieces and hot-load them later anytime.
-     * @param rootDirectory The root directory to register pieces at.
-     */
-    registerUserDirectories(rootDirectory = pieces_1.getRootData().root) {
-        for (const store of this.stores) {
-            store.registerPath(path_1.join(rootDirectory, store.name));
-        }
-    }
-    /**
-     * Registers a store.
-     * @param store The store to register.
-     */
-    registerStore(store) {
-        this.stores.add(store);
-        return this;
-    }
-    /**
-     * Deregisters a store.
-     * @since 1.0.0
-     * @param store The store to deregister.
-     */
-    deregisterStore(store) {
-        this.stores.delete(store);
-        return this;
     }
     /**
      * Loads all pieces, then logs the client in, establishing a websocket connection to Discord.
@@ -149,7 +103,7 @@ class SapphireClient extends discord_js_1.Client {
     async login(token) {
         // Register the user directory if not null:
         if (this.options.baseUserDirectory !== null) {
-            this.registerUserDirectories(this.options.baseUserDirectory);
+            this.stores.registerUserDirectories(this.options.baseUserDirectory);
         }
         // Call pre-login plugins:
         for (const plugin of SapphireClient.plugins.values("preLogin" /* PreLogin */)) {
@@ -157,7 +111,7 @@ class SapphireClient extends discord_js_1.Client {
             this.emit(Events_1.Events.PluginLoaded, plugin.type, plugin.name);
         }
         // Loads all stores, then call login:
-        await Promise.all([...this.stores].map((store) => store.loadAll()));
+        await Promise.all([...this.stores.values()].map((store) => store.loadAll()));
         const login = await super.login(token);
         // Call post-login plugins:
         for (const plugin of SapphireClient.plugins.values("postLogin" /* PostLogin */)) {

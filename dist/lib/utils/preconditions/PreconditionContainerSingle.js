@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PreconditionContainerSingle = void 0;
+const pieces_1 = require("@sapphire/pieces");
 /**
  * An [[IPreconditionContainer]] which runs a single precondition from [[SapphireClient.preconditions]].
  * @since 1.0.0
@@ -23,7 +24,7 @@ class PreconditionContainerSingle {
      * @param command The command the message invoked.
      */
     run(message, command) {
-        const precondition = message.client.preconditions.get(this.name);
+        const precondition = pieces_1.Store.injectedContext.stores.get('preconditions').get(this.name);
         if (precondition)
             return precondition.run(message, command, this.context);
         throw new Error(`The precondition "${this.name}" is not available.`);
