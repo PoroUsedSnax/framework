@@ -10,11 +10,12 @@ const Result_1 = require("./Result");
  * The argument parser to be used in [[Command]].
  */
 class Args {
-    constructor(message, command, parser) {
+    constructor(message, command, parser, context) {
         this.states = [];
         this.message = message;
         this.command = command;
         this.parser = parser;
+        this.commandContext = context;
     }
     /**
      * Sets the parser to the first token.
@@ -36,6 +37,7 @@ class Args {
             argument,
             message: this.message,
             command: this.command,
+            commandContext: this.commandContext,
             ...options
         }));
         if (result === null)
@@ -63,6 +65,7 @@ class Args {
             argument,
             message: this.message,
             command: this.command,
+            commandContext: this.commandContext,
             ...options
         });
         if (Result_1.isOk(result))
@@ -90,6 +93,7 @@ class Args {
                 argument,
                 message: this.message,
                 command: this.command,
+                commandContext: this.commandContext,
                 ...options
             }));
             if (result === null)

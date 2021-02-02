@@ -461,8 +461,9 @@ declare abstract class Command<T = Args> extends AliasPiece {
      * The pre-parse method. This method can be overriden by plugins to define their own argument parser.
      * @param message The message that triggered the command.
      * @param parameters The raw parameters as a single string.
+     * @param context The command-context used in this execution.
      */
-    preParse(message: Message, parameters: string): Awaited<T>;
+    preParse(message: Message, parameters: string, context: CommandContext): Awaited<T>;
     /**
      * Executes the command's logic.
      * @param message The message that triggered the command.
@@ -619,9 +620,13 @@ declare class Args {
      * The command that is being run.
      */
     readonly command: Command;
+    /**
+     * The context of the command being run.
+     */
+    readonly commandContext: CommandContext;
     private readonly parser;
     private readonly states;
-    constructor(message: Message, command: Command, parser: Args$1);
+    constructor(message: Message, command: Command, parser: Args$1, context: CommandContext);
     /**
      * Sets the parser to the first token.
      */
@@ -1205,6 +1210,7 @@ interface ArgumentContext<T = unknown> extends Record<PropertyKey, unknown> {
     args: Args;
     message: Message;
     command: Command;
+    commandContext: CommandContext;
     minimum?: number;
     maximum?: number;
     inclusive?: boolean;

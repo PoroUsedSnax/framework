@@ -63,11 +63,12 @@ class Command extends pieces_1.AliasPiece {
      * The pre-parse method. This method can be overriden by plugins to define their own argument parser.
      * @param message The message that triggered the command.
      * @param parameters The raw parameters as a single string.
+     * @param context The command-context used in this execution.
      */
-    preParse(message, parameters) {
+    preParse(message, parameters, context) {
         const parser = new Lexure.Parser(this.lexer.setInput(parameters).lex()).setUnorderedStrategy(this.strategy);
         const args = new Lexure.Args(parser.parse());
-        return new Args_1.Args(message, this, args);
+        return new Args_1.Args(message, this, args, context);
     }
     /**
      * Defines the JSON.stringify behavior of the command.
