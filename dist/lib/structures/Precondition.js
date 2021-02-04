@@ -12,7 +12,7 @@ class Precondition extends pieces_1.Piece {
      * Constructs a [[PreconditionError]] with the precondition parameter set to `this`.
      * @param options The information.
      */
-    error(options) {
+    error(options = {}) {
         return Result_1.err(new PreconditionError_1.PreconditionError({ precondition: this, ...options }));
     }
 }

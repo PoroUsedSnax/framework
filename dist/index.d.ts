@@ -198,7 +198,7 @@ declare abstract class Precondition extends Piece {
      * Constructs a [[PreconditionError]] with the precondition parameter set to `this`.
      * @param options The information.
      */
-    error(options: Omit<PreconditionError.Options, 'precondition'>): PreconditionResult;
+    error(options?: Omit<PreconditionError.Options, 'precondition'>): PreconditionResult;
 }
 interface PreconditionContext extends Record<PropertyKey, unknown> {
 }
