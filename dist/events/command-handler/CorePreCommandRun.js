@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CoreEvent = void 0;
+require("../../lib/errors/Identifiers");
 const UserError_1 = require("../../lib/errors/UserError");
 const Result_1 = require("../../lib/parsers/Result");
 const Event_1 = require("../../lib/structures/Event");
@@ -10,14 +11,9 @@ class CoreEvent extends Event_1.Event {
         super(context, { event: Events_1.Events.PreCommandRun });
     }
     async run(payload) {
-        const { message, command, parameters, context } = payload;
+        const { message, command } = payload;
         if (!command.enabled) {
-            message.client.emit(Events_1.Events.CommandDenied, new UserError_1.UserError({ identifier: 'CommandDisabled', message: 'This command is disabled.', context: payload }), {
-                message,
-                command,
-                parameters,
-                context
-            });
+            message.client.emit(Events_1.Events.CommandDenied, new UserError_1.UserError({ identifier: "commandDisabled" /* CommandDisabled */, message: 'This command is disabled.', context: payload }), payload);
             return;
         }
         const result = await command.preconditions.run(message, command, { command });

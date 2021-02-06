@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CorePrecondition = void 0;
 const ratelimits_1 = require("@sapphire/ratelimits");
+require("../lib/errors/Identifiers");
 const Precondition_1 = require("../lib/structures/Precondition");
 require("../lib/types/Enums");
 class CorePrecondition extends Precondition_1.Precondition {
@@ -21,6 +22,7 @@ class CorePrecondition extends Precondition_1.Precondition {
         return remaining === 0
             ? this.ok()
             : this.error({
+                identifier: "preconditionCooldown" /* PreconditionCooldown */,
                 message: `You have just used this command. Try again in ${Math.ceil(remaining / 1000)} second${remaining > 1000 ? 's' : ''}.`,
                 context: { remaining }
             });

@@ -1106,6 +1106,7 @@ interface ArgType {
     role: Role;
     string: string;
     textChannel: TextChannel;
+    url: URL;
     user: User;
     voiceChannel: VoiceChannel;
 }
@@ -1266,6 +1267,47 @@ declare namespace ArgumentError {
          */
         identifier?: string;
     }
+}
+
+declare const enum Identifiers {
+    ArgumentBoolean = "boolean",
+    ArgumentCategoryChannel = "categoryChannel",
+    ArgumentChannel = "channel",
+    ArgumentDate = "date",
+    ArgumentDateTooSmall = "dateTooSmall",
+    ArgumentDateTooBig = "dateTooBig",
+    ArgumentDMChannel = "dmChannel",
+    ArgumentFloat = "float",
+    ArgumentFloatTooSmall = "floatTooSmall",
+    ArgumentFloatTooBig = "floatTooBig",
+    ArgumentGuildChannel = "guildChannel",
+    ArgumentGuildChannelMissingGuild = "guildChannelMissingGuild",
+    ArgumentHyperlink = "hyperlink",
+    ArgumentInteger = "integer",
+    ArgumentIntegerTooSmall = "integerTooSmall",
+    ArgumentIntegerTooBig = "integerTooBig",
+    ArgumentMember = "member",
+    ArgumentMemberMissingGuild = "memberMissingGuild",
+    ArgumentMessage = "message",
+    ArgumentNewsChannel = "newsChannel",
+    ArgumentNumber = "number",
+    ArgumentNumberTooSmall = "numberTooSmall",
+    ArgumentNumberTooBig = "numberTooBig",
+    ArgumentRole = "role",
+    ArgumentRoleMissingGuild = "roleMissingGuild",
+    ArgumentStringTooShort = "stringTooShort",
+    ArgumentStringTooLong = "stringTooLong",
+    ArgumentTextChannel = "textChannel",
+    ArgumentUser = "user",
+    ArgumentVoiceChannel = "voiceChannel",
+    ArgsUnavailable = "argsUnavailable",
+    ArgsMissing = "argsMissing",
+    CommandDisabled = "commandDisabled",
+    PreconditionCooldown = "preconditionCooldown",
+    PreconditionDMOnly = "preconditionDmOnly",
+    PreconditionGuildOnly = "preconditionGuildOnly",
+    PreconditionNSFW = "preconditionNsfw",
+    PreconditionPermissions = "preconditionPermissions"
 }
 
 declare const enum CooldownLevel {
@@ -2015,4 +2057,4 @@ declare class PermissionsPrecondition implements PreconditionSingleResolvableDet
     constructor(permissions: PermissionResolvable);
 }
 
-export { ArgOptions, ArgType, Args, ArgsNextCallback, Argument, ArgumentContext, ArgumentError, ArgumentOptions, ArgumentResult, ArgumentStore, AsyncArgumentResult, AsyncPluginHooks, AsyncPreconditionContainerReturn, AsyncPreconditionResult, BucketType, ClientLoggerOptions, Command, CommandAcceptedPayload, CommandContext, CommandDeniedPayload, CommandErrorPayload, CommandOptions, CommandStore, CommandSuccessPayload, CooldownLevel, Err, Event, EventErrorPayload, EventOptions, EventStore, Events, ExtendedArgument, ExtendedArgumentContext, ExtendedArgumentOptions, IArgument, ICommandPayload, ILogger, IPieceError, IPreconditionCondition, IPreconditionContainer, LogLevel, LogMethods, Logger, Maybe, None, Ok, PermissionsPrecondition, Plugin, PluginHook, PluginManager, PreCommandRunPayload, Precondition, PreconditionArrayResolvable, PreconditionArrayResolvableDetails, PreconditionConditionAnd, PreconditionConditionOr, PreconditionContainerArray, PreconditionContainerResult, PreconditionContainerReturn, PreconditionContainerSingle, PreconditionContext, PreconditionEntryResolvable, PreconditionError, PreconditionResult, PreconditionRunCondition, PreconditionRunMode, PreconditionSingleResolvable, PreconditionSingleResolvableDetails, PreconditionStore, RepeatArgOptions, Result, SapphireClient, SapphireClientOptions, SapphirePluginAsyncHook, SapphirePluginHook, SapphirePluginHookEntry, SapphirePrefix, SapphirePrefixHook, Some, StoreRegistry, StoreRegistryEntries, SyncPluginHooks, UserError, err, isErr, isMaybe, isNone, isOk, isSome, maybe, none, ok, postInitialization, postLogin, preGenericsInitialization, preInitialization, preLogin, some };
+export { ArgOptions, ArgType, Args, ArgsNextCallback, Argument, ArgumentContext, ArgumentError, ArgumentOptions, ArgumentResult, ArgumentStore, AsyncArgumentResult, AsyncPluginHooks, AsyncPreconditionContainerReturn, AsyncPreconditionResult, BucketType, ClientLoggerOptions, Command, CommandAcceptedPayload, CommandContext, CommandDeniedPayload, CommandErrorPayload, CommandOptions, CommandStore, CommandSuccessPayload, CooldownLevel, Err, Event, EventErrorPayload, EventOptions, EventStore, Events, ExtendedArgument, ExtendedArgumentContext, ExtendedArgumentOptions, IArgument, ICommandPayload, ILogger, IPieceError, IPreconditionCondition, IPreconditionContainer, Identifiers, LogLevel, LogMethods, Logger, Maybe, None, Ok, PermissionsPrecondition, Plugin, PluginHook, PluginManager, PreCommandRunPayload, Precondition, PreconditionArrayResolvable, PreconditionArrayResolvableDetails, PreconditionConditionAnd, PreconditionConditionOr, PreconditionContainerArray, PreconditionContainerResult, PreconditionContainerReturn, PreconditionContainerSingle, PreconditionContext, PreconditionEntryResolvable, PreconditionError, PreconditionResult, PreconditionRunCondition, PreconditionRunMode, PreconditionSingleResolvable, PreconditionSingleResolvableDetails, PreconditionStore, RepeatArgOptions, Result, SapphireClient, SapphireClientOptions, SapphirePluginAsyncHook, SapphirePluginHook, SapphirePluginHookEntry, SapphirePrefix, SapphirePrefixHook, Some, StoreRegistry, StoreRegistryEntries, SyncPluginHooks, UserError, err, isErr, isMaybe, isNone, isOk, isSome, maybe, none, ok, postInitialization, postLogin, preGenericsInitialization, preInitialization, preLogin, some };

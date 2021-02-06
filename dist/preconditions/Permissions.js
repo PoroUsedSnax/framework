@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CorePrecondition = void 0;
 const discord_js_1 = require("discord.js");
+require("../lib/errors/Identifiers");
 const Precondition_1 = require("../lib/structures/Precondition");
 class CorePrecondition extends Precondition_1.Precondition {
     constructor() {
@@ -28,6 +29,7 @@ class CorePrecondition extends Precondition_1.Precondition {
         return missing.length === 0
             ? this.ok()
             : this.error({
+                identifier: "preconditionPermissions" /* PreconditionPermissions */,
                 message: `I am missing the following permissions to run this command: ${missing
                     .map((perm) => CorePrecondition.readablePermissions[perm])
                     .join(', ')}`,

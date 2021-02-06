@@ -74,7 +74,7 @@ class Argument extends pieces_1.AliasPiece {
      * @param message The description message for the rejection.
      */
     error(options) {
-        return Args_1.Args.error({ argument: this, ...options });
+        return Args_1.Args.error({ argument: this, identifier: this.name, ...options });
     }
 }
 exports.Argument = Argument;

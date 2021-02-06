@@ -19,6 +19,7 @@ Object.defineProperty(exports, "MissingExportsError", { enumerable: true, get: f
 Object.defineProperty(exports, "Piece", { enumerable: true, get: function () { return pieces_1.Piece; } });
 Object.defineProperty(exports, "Store", { enumerable: true, get: function () { return pieces_1.Store; } });
 __exportStar(require("./lib/errors/ArgumentError"), exports);
+__exportStar(require("./lib/errors/Identifiers"), exports);
 __exportStar(require("./lib/errors/PreconditionError"), exports);
 __exportStar(require("./lib/errors/UserError"), exports);
 __exportStar(require("./lib/parsers/Args"), exports);

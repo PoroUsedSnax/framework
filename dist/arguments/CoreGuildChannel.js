@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CoreArgument = void 0;
 const discord_utilities_1 = require("@sapphire/discord-utilities");
+require("../lib/errors/Identifiers");
 const Argument_1 = require("../lib/structures/Argument");
 class CoreArgument extends Argument_1.Argument {
     constructor(context) {
@@ -13,20 +14,13 @@ class CoreArgument extends Argument_1.Argument {
         if (!guild) {
             return this.error({
                 parameter,
-                identifier: 'ArgumentGuildChannelMissingGuild',
+                identifier: "guildChannelMissingGuild" /* ArgumentGuildChannelMissingGuild */,
                 message: 'The argument must be run in a guild.',
                 context
             });
         }
         const channel = (_a = this.resolveByID(parameter, guild)) !== null && _a !== void 0 ? _a : this.resolveByQuery(parameter, guild);
-        return channel
-            ? this.ok(channel)
-            : this.error({
-                parameter,
-                identifier: 'ArgumentGuildChannelUnknownChannel',
-                message: 'The argument did not resolve to a guild channel.',
-                context
-            });
+        return channel ? this.ok(channel) : this.error({ parameter, message: 'The argument did not resolve to a guild channel.', context });
     }
     resolveByID(argument, guild) {
         var _a, _b;

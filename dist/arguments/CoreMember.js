@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CoreArgument = void 0;
 const discord_utilities_1 = require("@sapphire/discord-utilities");
+require("../lib/errors/Identifiers");
 const Argument_1 = require("../lib/structures/Argument");
 class CoreArgument extends Argument_1.Argument {
     constructor(context) {
@@ -11,12 +12,15 @@ class CoreArgument extends Argument_1.Argument {
         var _a;
         const { guild } = context.message;
         if (!guild) {
-            return this.error({ parameter, identifier: 'ArgumentMemberMissingGuild', message: 'The argument must be run on a guild.', context });
+            return this.error({
+                parameter,
+                identifier: "memberMissingGuild" /* ArgumentMemberMissingGuild */,
+                message: 'The argument must be run on a guild.',
+                context
+            });
         }
         const member = (_a = (await this.resolveByID(parameter, guild))) !== null && _a !== void 0 ? _a : (await this.resolveByQuery(parameter, guild));
-        return member
-            ? this.ok(member)
-            : this.error({ parameter, identifier: 'ArgumentMemberUnknownMember', message: 'The argument did not resolve to a member.', context });
+        return member ? this.ok(member) : this.error({ parameter, message: 'The argument did not resolve to a member.', context });
     }
     async resolveByID(argument, guild) {
         var _a;

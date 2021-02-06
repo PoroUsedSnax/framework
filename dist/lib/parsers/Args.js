@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Args = void 0;
 const pieces_1 = require("@sapphire/pieces");
 const ArgumentError_1 = require("../errors/ArgumentError");
+require("../errors/Identifiers");
 const UserError_1 = require("../errors/UserError");
 const Maybe_1 = require("./Maybe");
 const Result_1 = require("./Result");
@@ -217,12 +218,12 @@ class Args {
     }
     unavailableArgument(type) {
         return Result_1.err(new UserError_1.UserError({
-            identifier: 'UnavailableArgument',
+            identifier: "argsUnavailable" /* ArgsUnavailable */,
             message: `The argument "${typeof type === 'string' ? type : type.name}" was not found.`
         }));
     }
     missingArguments() {
-        return Result_1.err(new UserError_1.UserError({ identifier: 'MissingArguments', message: 'There are no more arguments.' }));
+        return Result_1.err(new UserError_1.UserError({ identifier: "argsMissing" /* ArgsMissing */, message: 'There are no more arguments.' }));
     }
     /**
      * Resolves an argument.

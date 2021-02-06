@@ -13,12 +13,7 @@ class CoreArgument extends ExtendedArgument_1.ExtendedArgument {
     handle(channel, context) {
         return discord_js_utilities_1.isNewsChannel(channel)
             ? this.ok(channel)
-            : this.error({
-                parameter: context.parameter,
-                identifier: 'ArgumentNewsChannelInvalidChannel',
-                message: 'The argument did not resolve to a news channel.',
-                context
-            });
+            : this.error({ parameter: context.parameter, message: 'The argument did not resolve to a news channel.', context });
     }
 }
 exports.CoreArgument = CoreArgument;

@@ -10,12 +10,7 @@ class CoreArgument extends ExtendedArgument_1.ExtendedArgument {
     handle(channel, context) {
         return discord_js_utilities_1.isDMChannel(channel)
             ? this.ok(channel)
-            : this.error({
-                parameter: context.parameter,
-                identifier: 'ArgumentDMChannelInvalidChannel',
-                message: 'The argument did not resolve to a DM channel.',
-                context
-            });
+            : this.error({ parameter: context.parameter, message: 'The argument did not resolve to a DM channel.', context });
     }
 }
 exports.CoreArgument = CoreArgument;
