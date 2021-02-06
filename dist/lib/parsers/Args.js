@@ -11,6 +11,11 @@ const Result_1 = require("./Result");
  */
 class Args {
     constructor(message, command, parser, context) {
+        /**
+         * The states stored in the args.
+         * @see Args#save
+         * @see Args#restore
+         */
         this.states = [];
         this.message = message;
         this.command = command;
@@ -191,14 +196,14 @@ class Args {
     }
     /**
      * Saves the current state into the stack following a FILO strategy (first-in, last-out).
-     * @seealso [[Args.restore]]
+     * @see Args#restore
      */
     save() {
         this.states.push(this.parser.save());
     }
     /**
      * Restores the previously saved state from the stack.
-     * @seealso [[Args.save]]
+     * @see Args#save
      */
     restore() {
         if (this.states.length !== 0)

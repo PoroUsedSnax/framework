@@ -630,7 +630,15 @@ declare class Args {
      * The context of the command being run.
      */
     readonly commandContext: CommandContext;
-    private readonly parser;
+    /**
+     * The internal Lexure parser.
+     */
+    protected readonly parser: Args$1;
+    /**
+     * The states stored in the args.
+     * @see Args#save
+     * @see Args#restore
+     */
     private readonly states;
     constructor(message: Message, command: Command, parser: Args$1, context: CommandContext);
     /**
@@ -1046,12 +1054,12 @@ declare class Args {
     getOptions(...keys: readonly string[]): string[] | null;
     /**
      * Saves the current state into the stack following a FILO strategy (first-in, last-out).
-     * @seealso [[Args.restore]]
+     * @see Args#restore
      */
     save(): void;
     /**
      * Restores the previously saved state from the stack.
-     * @seealso [[Args.save]]
+     * @see Args#save
      */
     restore(): void;
     /**
