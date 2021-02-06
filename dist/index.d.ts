@@ -1903,9 +1903,8 @@ interface IPieceError {
 interface EventErrorPayload extends IPieceError {
     piece: Event;
 }
-interface CommandErrorPayload extends IPieceError {
+interface CommandErrorPayload extends CommandAcceptedPayload {
     piece: Command;
-    message: Message;
 }
 interface ICommandPayload {
     message: Message;
@@ -1919,9 +1918,8 @@ interface CommandAcceptedPayload extends ICommandPayload {
     parameters: string;
     context: CommandContext;
 }
-interface CommandSuccessPayload extends ICommandPayload {
+interface CommandSuccessPayload extends CommandAcceptedPayload {
     result: unknown;
-    parameters: string;
 }
 interface PreCommandRunPayload extends CommandDeniedPayload {
 }
@@ -1937,10 +1935,10 @@ declare module 'discord.js' {
         [Events.PreCommandRun]: [PreCommandRunPayload];
         [Events.CommandDenied]: [UserError, CommandDeniedPayload];
         [Events.CommandAccepted]: [CommandAcceptedPayload];
-        [Events.CommandRun]: [Message, Command];
+        [Events.CommandRun]: [Message, Command, CommandAcceptedPayload];
         [Events.CommandSuccess]: [CommandSuccessPayload];
         [Events.CommandError]: [Error, CommandErrorPayload];
-        [Events.CommandFinish]: [Message, Command];
+        [Events.CommandFinish]: [Message, Command, CommandAcceptedPayload];
         [Events.PluginLoaded]: [PluginHook, string | undefined];
         [K: string]: unknown[];
     }
