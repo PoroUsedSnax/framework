@@ -20,7 +20,7 @@ class CoreEvent extends Event_1.Event {
             });
             return;
         }
-        const result = await command.preconditions.run(message, command);
+        const result = await command.preconditions.run(message, command, { command });
         if (Result_1.isErr(result)) {
             message.client.emit(Events_1.Events.CommandDenied, result.error, payload);
         }

@@ -10,7 +10,11 @@ class CorePrecondition extends Precondition_1.Precondition {
         this.buckets = new WeakMap();
     }
     run(message, command, context) {
-        if (!context.delay || context.delay === 0)
+        // If the command it is testing for is not this one, return ok:
+        if (context.command !== command)
+            return this.ok();
+        // If there is no delay (undefined, null, 0), return ok:
+        if (!context.delay)
             return this.ok();
         const bucket = this.getBucket(command, context);
         const remaining = bucket.take(this.getID(message, context));

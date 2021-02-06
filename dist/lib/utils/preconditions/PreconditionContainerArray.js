@@ -93,10 +93,10 @@ class PreconditionContainerArray {
      * @param message The message that ran this precondition.
      * @param command The command the message invoked.
      */
-    run(message, command) {
+    run(message, command, context) {
         return this.mode === 0 /* Sequential */
-            ? this.condition.sequential(message, command, this.entries)
-            : this.condition.parallel(message, command, this.entries);
+            ? this.condition.sequential(message, command, this.entries, context)
+            : this.condition.parallel(message, command, this.entries, context);
     }
     /**
      * Parses the precondition entry resolvables, and adds them to the entries.

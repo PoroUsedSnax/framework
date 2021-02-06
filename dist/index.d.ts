@@ -107,60 +107,6 @@ declare function isOk<T, E>(x: Result<T, E>): x is Ok<T>;
 declare function isErr<T, E>(x: Result<T, E>): x is Err<E>;
 
 /**
- * Defines the result's value for a PreconditionContainer.
- * @since 1.0.0
- */
-declare type PreconditionContainerResult = Result<unknown, UserError>;
-/**
- * Defines the return type of the generic [[IPreconditionContainer.run]].
- * @since 1.0.0
- */
-declare type PreconditionContainerReturn = Awaited<PreconditionContainerResult>;
-/**
- * Async-only version of [[PreconditionContainerReturn]], to be used when the run method is async.
- * @since 1.0.0
- */
-declare type AsyncPreconditionContainerReturn = Promise<PreconditionContainerResult>;
-/**
- * An abstracted precondition container to be implemented by classes.
- * @since 1.0.0
- */
-interface IPreconditionContainer {
-    /**
-     * Runs a precondition container.
-     * @since 1.0.0
-     * @param message The message that ran this precondition.
-     * @param command The command the message invoked.
-     */
-    run(message: Message, command: Command): PreconditionContainerReturn;
-}
-
-/**
- * Defines the condition for [[PreconditionContainerArray]]s to run.
- * @since 1.0.0
- */
-interface IPreconditionCondition {
-    /**
-     * Runs the containers one by one.
-     * @seealso [[PreconditionRunMode.sequential]]
-     * @since 1.0.0
-     * @param message The message that ran this precondition.
-     * @param command The command the message invoked.
-     * @param entries The containers to run.
-     */
-    sequential(message: Message, command: Command, entries: readonly IPreconditionContainer[]): PreconditionContainerReturn;
-    /**
-     * Runs all the containers using `Promise.all`, then checks the results once all tasks finished running.
-     * @seealso [[PreconditionRunMode.parallel]]
-     * @since 1.0.0
-     * @param message The message that ran this precondition.
-     * @param command The command the message invoked.
-     * @param entries The containers to run.
-     */
-    parallel(message: Message, command: Command, entries: readonly IPreconditionContainer[]): PreconditionContainerReturn;
-}
-
-/**
  * Errors thrown by preconditions
  * @property name This will be `'PreconditionError'` and can be used to distinguish the type of error when any error gets thrown
  */
@@ -201,6 +147,61 @@ declare abstract class Precondition extends Piece {
     error(options?: Omit<PreconditionError.Options, 'precondition'>): PreconditionResult;
 }
 interface PreconditionContext extends Record<PropertyKey, unknown> {
+    command: Command;
+}
+
+/**
+ * Defines the result's value for a PreconditionContainer.
+ * @since 1.0.0
+ */
+declare type PreconditionContainerResult = Result<unknown, UserError>;
+/**
+ * Defines the return type of the generic [[IPreconditionContainer.run]].
+ * @since 1.0.0
+ */
+declare type PreconditionContainerReturn = Awaited<PreconditionContainerResult>;
+/**
+ * Async-only version of [[PreconditionContainerReturn]], to be used when the run method is async.
+ * @since 1.0.0
+ */
+declare type AsyncPreconditionContainerReturn = Promise<PreconditionContainerResult>;
+/**
+ * An abstracted precondition container to be implemented by classes.
+ * @since 1.0.0
+ */
+interface IPreconditionContainer {
+    /**
+     * Runs a precondition container.
+     * @since 1.0.0
+     * @param message The message that ran this precondition.
+     * @param command The command the message invoked.
+     */
+    run(message: Message, command: Command, context: PreconditionContext): PreconditionContainerReturn;
+}
+
+/**
+ * Defines the condition for [[PreconditionContainerArray]]s to run.
+ * @since 1.0.0
+ */
+interface IPreconditionCondition {
+    /**
+     * Runs the containers one by one.
+     * @seealso [[PreconditionRunMode.sequential]]
+     * @since 1.0.0
+     * @param message The message that ran this precondition.
+     * @param command The command the message invoked.
+     * @param entries The containers to run.
+     */
+    sequential(message: Message, command: Command, entries: readonly IPreconditionContainer[], context: PreconditionContext): PreconditionContainerReturn;
+    /**
+     * Runs all the containers using `Promise.all`, then checks the results once all tasks finished running.
+     * @seealso [[PreconditionRunMode.parallel]]
+     * @since 1.0.0
+     * @param message The message that ran this precondition.
+     * @param command The command the message invoked.
+     * @param entries The containers to run.
+     */
+    parallel(message: Message, command: Command, entries: readonly IPreconditionContainer[], context: PreconditionContext): PreconditionContainerReturn;
 }
 
 /**
@@ -218,7 +219,7 @@ interface PreconditionSingleResolvableDetails {
      * The context to be set at [[PreconditionContainerSingle.context]].
      * @since 1.0.0
      */
-    context: PreconditionContext;
+    context: Record<PropertyKey, unknown>;
 }
 /**
  * Defines the data accepted by [[PreconditionContainerSingle]]'s constructor.
@@ -236,7 +237,7 @@ declare class PreconditionContainerSingle implements IPreconditionContainer {
      * [[PreconditionSingleResolvableDetails.context]].
      * @since 1.0.0
      */
-    readonly context: PreconditionContext;
+    readonly context: Record<PropertyKey, unknown>;
     /**
      * The name of the precondition to run.
      * @since 1.0.0
@@ -249,7 +250,7 @@ declare class PreconditionContainerSingle implements IPreconditionContainer {
      * @param message The message that ran this precondition.
      * @param command The command the message invoked.
      */
-    run(message: Message, command: Command): Awaited<Result<unknown, UserError>>;
+    run(message: Message, command: Command, context: PreconditionContext): Awaited<Result<unknown, UserError>>;
 }
 
 /**
@@ -362,7 +363,7 @@ declare class PreconditionContainerArray implements IPreconditionContainer {
      * @param message The message that ran this precondition.
      * @param command The command the message invoked.
      */
-    run(message: Message, command: Command): PreconditionContainerReturn;
+    run(message: Message, command: Command, context: PreconditionContext): PreconditionContainerReturn;
     /**
      * Parses the precondition entry resolvables, and adds them to the entries.
      * @since 1.0.0
@@ -1998,7 +1999,7 @@ declare const PreconditionConditionOr: IPreconditionCondition;
  */
 declare class PermissionsPrecondition implements PreconditionSingleResolvableDetails {
     name: string;
-    context: PreconditionContext;
+    context: Record<PropertyKey, unknown>;
     /**
      * Constructs a precondition container entry.
      * @param permissions The permissions that will be required by this command.
