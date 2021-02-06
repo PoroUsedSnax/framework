@@ -236,14 +236,18 @@ class Args {
         return { run: cb, name };
     }
     /**
-     * Constructs an [[ArgumentError]] with a custom type.
-     * @param argument The argument that caused the rejection.
-     * @param parameter The parameter that triggered the argument.
-     * @param type The identifier for the error.
-     * @param message The description message for the rejection.
+     * Constructs an [[Ok]] result.
+     * @param value The value to pass.
+     */
+    static ok(value) {
+        return Result_1.ok(value);
+    }
+    /**
+     * Constructs an [[Err]] result containing an [[ArgumentError]].
+     * @param options The options for the argument error.
      */
     static error(options) {
-        return new ArgumentError_1.ArgumentError(options);
+        return Result_1.err(new ArgumentError_1.ArgumentError(options));
     }
 }
 exports.Args = Args;

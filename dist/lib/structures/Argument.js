@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Argument = void 0;
 const pieces_1 = require("@sapphire/pieces");
 const Args_1 = require("../parsers/Args");
-const Result_1 = require("../parsers/Result");
 /**
  * The base argument class. This class is abstract and is to be extended by subclasses implementing the methods. In
  * Sapphire's workflow, arguments are called when using [[Args]]'s methods (usually used inside [[Command]]s by default).
@@ -66,7 +65,7 @@ class Argument extends pieces_1.AliasPiece {
      * @param value The value to wrap.
      */
     ok(value) {
-        return Result_1.ok(value);
+        return Args_1.Args.ok(value);
     }
     /**
      * Constructs an [[ArgumentError]] with a custom type.
@@ -75,7 +74,7 @@ class Argument extends pieces_1.AliasPiece {
      * @param message The description message for the rejection.
      */
     error(options) {
-        return Result_1.err(Args_1.Args.error({ argument: this, ...options }));
+        return Args_1.Args.error({ argument: this, ...options });
     }
 }
 exports.Argument = Argument;
