@@ -1966,9 +1966,6 @@ interface IPieceError {
 interface EventErrorPayload extends IPieceError {
     piece: Event;
 }
-interface CommandErrorPayload extends CommandAcceptedPayload {
-    piece: Command;
-}
 interface UnknownCommandNamePayload {
     message: Message;
     prefix: string | RegExp;
@@ -1981,6 +1978,8 @@ interface ICommandPayload {
     message: Message;
     command: Command;
 }
+interface PreCommandRunPayload extends CommandDeniedPayload {
+}
 interface CommandDeniedPayload extends ICommandPayload {
     parameters: string;
     context: CommandContext;
@@ -1989,10 +1988,16 @@ interface CommandAcceptedPayload extends ICommandPayload {
     parameters: string;
     context: CommandContext;
 }
-interface CommandSuccessPayload extends CommandAcceptedPayload {
-    result: unknown;
+interface CommandRunPayload<T extends Args = Args> extends CommandAcceptedPayload {
+    args: T;
 }
-interface PreCommandRunPayload extends CommandDeniedPayload {
+interface CommandFinishPayload<T extends Args = Args> extends CommandRunPayload<T> {
+}
+interface CommandErrorPayload<T extends Args = Args> extends CommandRunPayload<T> {
+    piece: Command;
+}
+interface CommandSuccessPayload<T extends Args = Args> extends CommandRunPayload<T> {
+    result: unknown;
 }
 declare module 'discord.js' {
     interface ClientEvents {
@@ -2007,10 +2012,10 @@ declare module 'discord.js' {
         [Events.PreCommandRun]: [payload: PreCommandRunPayload];
         [Events.CommandDenied]: [error: UserError, payload: CommandDeniedPayload];
         [Events.CommandAccepted]: [payload: CommandAcceptedPayload];
-        [Events.CommandRun]: [message: Message, command: Command, payload: CommandAcceptedPayload];
+        [Events.CommandRun]: [message: Message, command: Command, payload: CommandRunPayload];
         [Events.CommandSuccess]: [payload: CommandSuccessPayload];
         [Events.CommandError]: [error: Error, payload: CommandErrorPayload];
-        [Events.CommandFinish]: [message: Message, command: Command, payload: CommandAcceptedPayload];
+        [Events.CommandFinish]: [message: Message, command: Command, payload: CommandFinishPayload];
         [Events.PluginLoaded]: [hook: PluginHook, name: string | undefined];
         [K: string]: unknown[];
     }
@@ -2073,4 +2078,4 @@ declare class PermissionsPrecondition implements PreconditionSingleResolvableDet
     constructor(permissions: PermissionResolvable);
 }
 
-export { ArgOptions, ArgType, Args, ArgsNextCallback, Argument, ArgumentContext, ArgumentError, ArgumentOptions, ArgumentResult, ArgumentStore, AsyncArgumentResult, AsyncPluginHooks, AsyncPreconditionContainerReturn, AsyncPreconditionResult, BucketType, ClientLoggerOptions, Command, CommandAcceptedPayload, CommandContext, CommandDeniedPayload, CommandErrorPayload, CommandOptions, CommandStore, CommandSuccessPayload, CooldownLevel, Err, Event, EventErrorPayload, EventOptions, EventStore, Events, ExtendedArgument, ExtendedArgumentContext, ExtendedArgumentOptions, IArgument, ICommandPayload, ILogger, IPieceError, IPreconditionCondition, IPreconditionContainer, Identifiers, LogLevel, LogMethods, Logger, Maybe, None, Ok, PermissionsPrecondition, Plugin, PluginHook, PluginManager, PreCommandRunPayload, Precondition, PreconditionArrayResolvable, PreconditionArrayResolvableDetails, PreconditionConditionAnd, PreconditionConditionOr, PreconditionContainerArray, PreconditionContainerResult, PreconditionContainerReturn, PreconditionContainerSingle, PreconditionContext, PreconditionEntryResolvable, PreconditionError, PreconditionResult, PreconditionRunCondition, PreconditionRunMode, PreconditionSingleResolvable, PreconditionSingleResolvableDetails, PreconditionStore, RepeatArgOptions, Result, SapphireClient, SapphireClientOptions, SapphirePluginAsyncHook, SapphirePluginHook, SapphirePluginHookEntry, SapphirePrefix, SapphirePrefixHook, Some, StoreRegistry, StoreRegistryEntries, SyncPluginHooks, UnknownCommandNamePayload, UnknownCommandPayload, UserError, err, isErr, isMaybe, isNone, isOk, isSome, maybe, none, ok, postInitialization, postLogin, preGenericsInitialization, preInitialization, preLogin, some };
+export { ArgOptions, ArgType, Args, ArgsNextCallback, Argument, ArgumentContext, ArgumentError, ArgumentOptions, ArgumentResult, ArgumentStore, AsyncArgumentResult, AsyncPluginHooks, AsyncPreconditionContainerReturn, AsyncPreconditionResult, BucketType, ClientLoggerOptions, Command, CommandAcceptedPayload, CommandContext, CommandDeniedPayload, CommandErrorPayload, CommandFinishPayload, CommandOptions, CommandRunPayload, CommandStore, CommandSuccessPayload, CooldownLevel, Err, Event, EventErrorPayload, EventOptions, EventStore, Events, ExtendedArgument, ExtendedArgumentContext, ExtendedArgumentOptions, IArgument, ICommandPayload, ILogger, IPieceError, IPreconditionCondition, IPreconditionContainer, Identifiers, LogLevel, LogMethods, Logger, Maybe, None, Ok, PermissionsPrecondition, Plugin, PluginHook, PluginManager, PreCommandRunPayload, Precondition, PreconditionArrayResolvable, PreconditionArrayResolvableDetails, PreconditionConditionAnd, PreconditionConditionOr, PreconditionContainerArray, PreconditionContainerResult, PreconditionContainerReturn, PreconditionContainerSingle, PreconditionContext, PreconditionEntryResolvable, PreconditionError, PreconditionResult, PreconditionRunCondition, PreconditionRunMode, PreconditionSingleResolvable, PreconditionSingleResolvableDetails, PreconditionStore, RepeatArgOptions, Result, SapphireClient, SapphireClientOptions, SapphirePluginAsyncHook, SapphirePluginHook, SapphirePluginHookEntry, SapphirePrefix, SapphirePrefixHook, Some, StoreRegistry, StoreRegistryEntries, SyncPluginHooks, UnknownCommandNamePayload, UnknownCommandPayload, UserError, err, isErr, isMaybe, isNone, isOk, isSome, maybe, none, ok, postInitialization, postLogin, preGenericsInitialization, preInitialization, preLogin, some };

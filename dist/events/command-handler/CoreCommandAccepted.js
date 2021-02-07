@@ -11,15 +11,15 @@ class CoreEvent extends Event_1.Event {
         const { message, command, parameters, context } = payload;
         const args = await command.preParse(message, parameters, context);
         try {
-            message.client.emit(Events_1.Events.CommandRun, message, command, payload);
+            message.client.emit(Events_1.Events.CommandRun, message, command, { ...payload, args });
             const result = await command.run(message, args, context);
-            message.client.emit(Events_1.Events.CommandSuccess, { ...payload, result });
+            message.client.emit(Events_1.Events.CommandSuccess, { ...payload, args, result });
         }
         catch (error) {
-            message.client.emit(Events_1.Events.CommandError, error, { ...payload, piece: command });
+            message.client.emit(Events_1.Events.CommandError, error, { ...payload, args, piece: command });
         }
         finally {
-            message.client.emit(Events_1.Events.CommandFinish, message, command, payload);
+            message.client.emit(Events_1.Events.CommandFinish, message, command, { ...payload, args });
         }
     }
 }
