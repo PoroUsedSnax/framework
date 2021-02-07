@@ -147,7 +147,7 @@ declare abstract class Precondition extends Piece {
     error(options?: Omit<PreconditionError.Options, 'precondition'>): PreconditionResult;
 }
 interface PreconditionContext extends Record<PropertyKey, unknown> {
-    command: Command;
+    external?: boolean;
 }
 
 /**
@@ -176,7 +176,7 @@ interface IPreconditionContainer {
      * @param message The message that ran this precondition.
      * @param command The command the message invoked.
      */
-    run(message: Message, command: Command, context: PreconditionContext): PreconditionContainerReturn;
+    run(message: Message, command: Command, context?: PreconditionContext): PreconditionContainerReturn;
 }
 
 /**
@@ -250,7 +250,7 @@ declare class PreconditionContainerSingle implements IPreconditionContainer {
      * @param message The message that ran this precondition.
      * @param command The command the message invoked.
      */
-    run(message: Message, command: Command, context: PreconditionContext): Awaited<Result<unknown, UserError>>;
+    run(message: Message, command: Command, context?: PreconditionContext): Awaited<Result<unknown, UserError>>;
 }
 
 /**
@@ -363,7 +363,7 @@ declare class PreconditionContainerArray implements IPreconditionContainer {
      * @param message The message that ran this precondition.
      * @param command The command the message invoked.
      */
-    run(message: Message, command: Command, context: PreconditionContext): PreconditionContainerReturn;
+    run(message: Message, command: Command, context?: PreconditionContext): PreconditionContainerReturn;
     /**
      * Parses the precondition entry resolvables, and adds them to the entries.
      * @since 1.0.0

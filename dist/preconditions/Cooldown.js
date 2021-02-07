@@ -12,7 +12,7 @@ class CorePrecondition extends Precondition_1.Precondition {
     }
     run(message, command, context) {
         // If the command it is testing for is not this one, return ok:
-        if (context.command !== command)
+        if (context.external)
             return this.ok();
         // If there is no delay (undefined, null, 0), return ok:
         if (!context.delay)

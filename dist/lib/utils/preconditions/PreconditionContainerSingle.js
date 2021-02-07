@@ -23,7 +23,7 @@ class PreconditionContainerSingle {
      * @param message The message that ran this precondition.
      * @param command The command the message invoked.
      */
-    run(message, command, context) {
+    run(message, command, context = {}) {
         const precondition = pieces_1.Store.injectedContext.stores.get('preconditions').get(this.name);
         if (precondition)
             return precondition.run(message, command, { ...context, ...this.context });

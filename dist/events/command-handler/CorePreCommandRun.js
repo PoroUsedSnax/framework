@@ -16,7 +16,7 @@ class CoreEvent extends Event_1.Event {
             message.client.emit(Events_1.Events.CommandDenied, new UserError_1.UserError({ identifier: "commandDisabled" /* CommandDisabled */, message: 'This command is disabled.', context: payload }), payload);
             return;
         }
-        const result = await command.preconditions.run(message, command, { command });
+        const result = await command.preconditions.run(message, command);
         if (Result_1.isErr(result)) {
             message.client.emit(Events_1.Events.CommandDenied, result.error, payload);
         }
