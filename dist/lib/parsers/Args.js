@@ -217,9 +217,11 @@ class Args {
         return this.parser.finished;
     }
     unavailableArgument(type) {
+        const name = typeof type === 'string' ? type : type.name;
         return Result_1.err(new UserError_1.UserError({
             identifier: "argsUnavailable" /* ArgsUnavailable */,
-            message: `The argument "${typeof type === 'string' ? type : type.name}" was not found.`
+            message: `The argument "${name}" was not found.`,
+            context: { name }
         }));
     }
     missingArguments() {
