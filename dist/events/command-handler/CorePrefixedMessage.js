@@ -23,7 +23,7 @@ class CoreEvent extends Event_1.Event {
         // Retrieve the command and validate:
         const command = stores.get('commands').get(client.options.caseInsensitiveCommands ? commandName.toLowerCase() : commandName);
         if (!command) {
-            client.emit(Events_1.Events.UnknownCommand, { message, prefix, commandPrefix });
+            client.emit(Events_1.Events.UnknownCommand, { message, prefix, commandName, commandPrefix });
             return;
         }
         // Run the last stage before running the command:

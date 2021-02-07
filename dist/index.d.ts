@@ -1969,6 +1969,7 @@ interface UnknownCommandNamePayload {
     commandPrefix: string;
 }
 interface UnknownCommandPayload extends UnknownCommandNamePayload {
+    commandName: string;
 }
 interface ICommandPayload {
     message: Message;
