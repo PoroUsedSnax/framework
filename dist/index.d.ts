@@ -1238,7 +1238,7 @@ interface ArgumentContext<T = unknown> extends Record<PropertyKey, unknown> {
  * @since 1.0.0
  * @property name This will be `'ArgumentError'` and can be used to distinguish the type of error when any error gets thrown
  */
-declare class ArgumentError<T> extends UserError {
+declare class ArgumentError<T = unknown> extends UserError {
     readonly argument: IArgument<T>;
     readonly parameter: string;
     constructor(options: ArgumentError.Options<T>);

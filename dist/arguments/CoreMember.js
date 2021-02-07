@@ -16,11 +16,17 @@ class CoreArgument extends Argument_1.Argument {
                 parameter,
                 identifier: "memberMissingGuild" /* ArgumentMemberMissingGuild */,
                 message: 'The argument must be run on a guild.',
-                context
+                context: { ...context, guild }
             });
         }
         const member = (_a = (await this.resolveByID(parameter, guild))) !== null && _a !== void 0 ? _a : (await this.resolveByQuery(parameter, guild));
-        return member ? this.ok(member) : this.error({ parameter, message: 'The argument did not resolve to a member.', context });
+        return member
+            ? this.ok(member)
+            : this.error({
+                parameter,
+                message: 'The argument did not resolve to a member.',
+                context: { ...context, guild }
+            });
     }
     async resolveByID(argument, guild) {
         var _a;

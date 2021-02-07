@@ -9,13 +9,18 @@ class CoreArgument extends Argument_1.Argument {
         super(context, { name: 'message' });
     }
     async run(parameter, context) {
-        var _a;
-        const message = (_a = (await this.resolveByID(parameter, context))) !== null && _a !== void 0 ? _a : (await this.resolveByLink(parameter, context));
-        return message ? this.ok(message) : this.error({ parameter, message: 'The argument did not resolve to a message.', context });
-    }
-    async resolveByID(argument, context) {
-        var _a;
+        var _a, _b;
         const channel = (_a = context.channel) !== null && _a !== void 0 ? _a : context.message.channel;
+        const message = (_b = (await this.resolveByID(parameter, channel))) !== null && _b !== void 0 ? _b : (await this.resolveByLink(parameter, context));
+        return message
+            ? this.ok(message)
+            : this.error({
+                parameter,
+                message: 'The argument did not resolve to a message.',
+                context: { ...context, channel }
+            });
+    }
+    async resolveByID(argument, channel) {
         return discord_js_utilities_1.SnowflakeRegex.test(argument) ? channel.messages.fetch(argument).catch(() => null) : null;
     }
     async resolveByLink(argument, { message }) {

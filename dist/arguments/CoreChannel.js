@@ -8,7 +8,13 @@ class CoreArgument extends Argument_1.Argument {
     }
     run(parameter, context) {
         const channel = (context.message.guild ? context.message.guild.channels : this.context.client.channels).cache.get(parameter);
-        return channel ? this.ok(channel) : this.error({ parameter, message: 'The argument did not resolve to a channel.', context });
+        return channel
+            ? this.ok(channel)
+            : this.error({
+                parameter,
+                message: 'The argument did not resolve to a channel.',
+                context: { ...context, channel }
+            });
     }
 }
 exports.CoreArgument = CoreArgument;
