@@ -6,13 +6,10 @@ const Event_1 = require("../../lib/structures/Event");
 const Events_1 = require("../../lib/types/Events");
 class CoreEvent extends Event_1.Event {
     constructor(context) {
-        super(context, { event: Events_1.Events.Message });
+        super(context, { event: Events_1.Events.PreMessageParsed });
         this.requiredPermissions = new discord_js_1.Permissions(['VIEW_CHANNEL', 'SEND_MESSAGES']).freeze();
     }
     async run(message) {
-        // Stop bots and webhooks from running commands.
-        if (message.author.bot || message.webhookID)
-            return;
         // If the bot cannot run the command due to lack of permissions, return.
         const canRun = await this.canRunInChannel(message);
         if (!canRun)

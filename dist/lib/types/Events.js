@@ -60,6 +60,7 @@ var Events;
     Events["PiecePostLoad"] = "piecePostLoad";
     Events["MentionPrefixOnly"] = "mentionPrefixOnly";
     Events["EventError"] = "eventError";
+    Events["PreMessageParsed"] = "preMessageParsed";
     Events["PrefixedMessage"] = "prefixedMessage";
     Events["UnknownCommandName"] = "unknownCommandName";
     Events["UnknownCommand"] = "unknownCommand";
