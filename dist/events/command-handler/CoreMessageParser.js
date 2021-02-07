@@ -72,9 +72,13 @@ class CoreEvent extends Event_1.Event {
         var _a;
         if (prefixes === null)
             return null;
-        if (typeof prefixes === 'string')
-            return content.startsWith(prefixes) ? prefixes : null;
-        return (_a = prefixes.find((prefix) => content.startsWith(prefix))) !== null && _a !== void 0 ? _a : null;
+        const { caseInsensitivePrefixes } = this.context.client.options;
+        if (caseInsensitivePrefixes)
+            content = content.toLowerCase();
+        if (typeof prefixes === 'string') {
+            return content.startsWith(caseInsensitivePrefixes ? prefixes.toLowerCase() : prefixes) ? prefixes : null;
+        }
+        return (_a = prefixes.find((prefix) => content.startsWith(caseInsensitivePrefixes ? prefix.toLowerCase() : prefix))) !== null && _a !== void 0 ? _a : null;
     }
 }
 exports.CoreEvent = CoreEvent;
