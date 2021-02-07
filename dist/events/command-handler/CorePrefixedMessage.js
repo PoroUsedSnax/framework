@@ -16,14 +16,14 @@ class CoreEvent extends Event_1.Event {
         // passed, and a non -1 value when '[p]command arg' is passed instead.
         const spaceIndex = prefixLess.indexOf(' ');
         const commandName = spaceIndex === -1 ? prefixLess : prefixLess.slice(0, spaceIndex);
-        if (!commandName) {
-            client.emit(Events_1.Events.UnknownCommandName, message, prefix);
+        if (commandName.length === 0) {
+            client.emit(Events_1.Events.UnknownCommandName, { message, prefix, commandPrefix });
             return;
         }
         // Retrieve the command and validate:
         const command = stores.get('commands').get(client.options.caseInsensitiveCommands ? commandName.toLowerCase() : commandName);
         if (!command) {
-            client.emit(Events_1.Events.UnknownCommand, message, commandName, prefix);
+            client.emit(Events_1.Events.UnknownCommand, { message, prefix, commandPrefix });
             return;
         }
         // Run the last stage before running the command:

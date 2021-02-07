@@ -1963,6 +1963,13 @@ interface EventErrorPayload extends IPieceError {
 interface CommandErrorPayload extends CommandAcceptedPayload {
     piece: Command;
 }
+interface UnknownCommandNamePayload {
+    message: Message;
+    prefix: string | RegExp;
+    commandPrefix: string;
+}
+interface UnknownCommandPayload extends UnknownCommandNamePayload {
+}
 interface ICommandPayload {
     message: Message;
     command: Command;
@@ -1988,8 +1995,8 @@ declare module 'discord.js' {
         [Events.EventError]: [Error, EventErrorPayload];
         [Events.PreMessageParsed]: [Message];
         [Events.PrefixedMessage]: [Message, string | RegExp];
-        [Events.UnknownCommandName]: [Message, string | RegExp];
-        [Events.UnknownCommand]: [Message, string, string | RegExp];
+        [Events.UnknownCommandName]: [UnknownCommandNamePayload];
+        [Events.UnknownCommand]: [UnknownCommandPayload];
         [Events.PreCommandRun]: [PreCommandRunPayload];
         [Events.CommandDenied]: [UserError, CommandDeniedPayload];
         [Events.CommandAccepted]: [CommandAcceptedPayload];
@@ -2059,4 +2066,4 @@ declare class PermissionsPrecondition implements PreconditionSingleResolvableDet
     constructor(permissions: PermissionResolvable);
 }
 
-export { ArgOptions, ArgType, Args, ArgsNextCallback, Argument, ArgumentContext, ArgumentError, ArgumentOptions, ArgumentResult, ArgumentStore, AsyncArgumentResult, AsyncPluginHooks, AsyncPreconditionContainerReturn, AsyncPreconditionResult, BucketType, ClientLoggerOptions, Command, CommandAcceptedPayload, CommandContext, CommandDeniedPayload, CommandErrorPayload, CommandOptions, CommandStore, CommandSuccessPayload, CooldownLevel, Err, Event, EventErrorPayload, EventOptions, EventStore, Events, ExtendedArgument, ExtendedArgumentContext, ExtendedArgumentOptions, IArgument, ICommandPayload, ILogger, IPieceError, IPreconditionCondition, IPreconditionContainer, Identifiers, LogLevel, LogMethods, Logger, Maybe, None, Ok, PermissionsPrecondition, Plugin, PluginHook, PluginManager, PreCommandRunPayload, Precondition, PreconditionArrayResolvable, PreconditionArrayResolvableDetails, PreconditionConditionAnd, PreconditionConditionOr, PreconditionContainerArray, PreconditionContainerResult, PreconditionContainerReturn, PreconditionContainerSingle, PreconditionContext, PreconditionEntryResolvable, PreconditionError, PreconditionResult, PreconditionRunCondition, PreconditionRunMode, PreconditionSingleResolvable, PreconditionSingleResolvableDetails, PreconditionStore, RepeatArgOptions, Result, SapphireClient, SapphireClientOptions, SapphirePluginAsyncHook, SapphirePluginHook, SapphirePluginHookEntry, SapphirePrefix, SapphirePrefixHook, Some, StoreRegistry, StoreRegistryEntries, SyncPluginHooks, UserError, err, isErr, isMaybe, isNone, isOk, isSome, maybe, none, ok, postInitialization, postLogin, preGenericsInitialization, preInitialization, preLogin, some };
+export { ArgOptions, ArgType, Args, ArgsNextCallback, Argument, ArgumentContext, ArgumentError, ArgumentOptions, ArgumentResult, ArgumentStore, AsyncArgumentResult, AsyncPluginHooks, AsyncPreconditionContainerReturn, AsyncPreconditionResult, BucketType, ClientLoggerOptions, Command, CommandAcceptedPayload, CommandContext, CommandDeniedPayload, CommandErrorPayload, CommandOptions, CommandStore, CommandSuccessPayload, CooldownLevel, Err, Event, EventErrorPayload, EventOptions, EventStore, Events, ExtendedArgument, ExtendedArgumentContext, ExtendedArgumentOptions, IArgument, ICommandPayload, ILogger, IPieceError, IPreconditionCondition, IPreconditionContainer, Identifiers, LogLevel, LogMethods, Logger, Maybe, None, Ok, PermissionsPrecondition, Plugin, PluginHook, PluginManager, PreCommandRunPayload, Precondition, PreconditionArrayResolvable, PreconditionArrayResolvableDetails, PreconditionConditionAnd, PreconditionConditionOr, PreconditionContainerArray, PreconditionContainerResult, PreconditionContainerReturn, PreconditionContainerSingle, PreconditionContext, PreconditionEntryResolvable, PreconditionError, PreconditionResult, PreconditionRunCondition, PreconditionRunMode, PreconditionSingleResolvable, PreconditionSingleResolvableDetails, PreconditionStore, RepeatArgOptions, Result, SapphireClient, SapphireClientOptions, SapphirePluginAsyncHook, SapphirePluginHook, SapphirePluginHookEntry, SapphirePrefix, SapphirePrefixHook, Some, StoreRegistry, StoreRegistryEntries, SyncPluginHooks, UnknownCommandNamePayload, UnknownCommandPayload, UserError, err, isErr, isMaybe, isNone, isOk, isSome, maybe, none, ok, postInitialization, postLogin, preGenericsInitialization, preInitialization, preLogin, some };
