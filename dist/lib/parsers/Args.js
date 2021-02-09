@@ -216,16 +216,22 @@ class Args {
     get finished() {
         return this.parser.finished;
     }
+    /**
+     * Defines the `JSON.stringify` override.
+     */
+    toJSON() {
+        return { message: this.message, command: this.command, commandContext: this.commandContext };
+    }
     unavailableArgument(type) {
         const name = typeof type === 'string' ? type : type.name;
         return Result_1.err(new UserError_1.UserError({
             identifier: "argsUnavailable" /* ArgsUnavailable */,
             message: `The argument "${name}" was not found.`,
-            context: { name }
+            context: { name, ...this.toJSON() }
         }));
     }
     missingArguments() {
-        return Result_1.err(new UserError_1.UserError({ identifier: "argsMissing" /* ArgsMissing */, message: 'There are no more arguments.' }));
+        return Result_1.err(new UserError_1.UserError({ identifier: "argsMissing" /* ArgsMissing */, message: 'There are no more arguments.', context: this.toJSON() }));
     }
     /**
      * Resolves an argument.

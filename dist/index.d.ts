@@ -1066,6 +1066,14 @@ declare class Args {
      * Whether all arguments have been consumed.
      */
     get finished(): boolean;
+    /**
+     * Defines the `JSON.stringify` override.
+     */
+    toJSON(): {
+        message: Message;
+        command: Command<Args>;
+        commandContext: CommandContext;
+    };
     protected unavailableArgument<T>(type: string | IArgument<T>): Err<UserError>;
     protected missingArguments(): Err<UserError>;
     /**
