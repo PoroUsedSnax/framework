@@ -412,7 +412,7 @@ declare class PreconditionContainerArray implements IPreconditionContainer {
      * }
      * ```
      */
-    protected static readonly conditions: Collection<PreconditionRunCondition, IPreconditionCondition>;
+    static readonly conditions: Collection<PreconditionRunCondition, IPreconditionCondition>;
 }
 
 /**
