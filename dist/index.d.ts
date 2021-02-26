@@ -1803,7 +1803,7 @@ declare class SapphireClient extends Client {
      * Loads all pieces, then logs the client in, establishing a websocket connection to Discord.
      * @since 1.0.0
      * @param token Token of the account to log in with.
-     * @retrun Token of the account used.
+     * @return Token of the account used.
      */
     login(token?: string): Promise<string>;
     static plugins: PluginManager;
