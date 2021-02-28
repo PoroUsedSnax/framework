@@ -266,7 +266,7 @@ declare class PreconditionContainerSingle implements IPreconditionContainer {
      * @param message The message that ran this precondition.
      * @param command The command the message invoked.
      */
-    run(message: Message, command: Command, context?: PreconditionContext): Awaited<Result<unknown, UserError>>;
+    run(message: Message, command: Command, context?: PreconditionContext): PreconditionResult;
 }
 
 /**
