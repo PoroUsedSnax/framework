@@ -1,20 +1,8 @@
 "use strict";
-var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to set private field on non-instance");
-    }
-    privateMap.set(receiver, value);
-    return value;
-};
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to get private field on non-instance");
-    }
-    return privateMap.get(receiver);
-};
 var _listener;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Event = void 0;
+const tslib_1 = require("tslib");
 const pieces_1 = require("@sapphire/pieces");
 const Events_1 = require("../types/Events");
 /**
@@ -68,15 +56,15 @@ class Event extends pieces_1.Piece {
                 : (_a = (typeof options.emitter === 'string' ? Reflect.get(this.context.client, options.emitter) : options.emitter)) !== null && _a !== void 0 ? _a : null;
         this.event = (_b = options.event) !== null && _b !== void 0 ? _b : this.name;
         this.once = (_c = options.once) !== null && _c !== void 0 ? _c : false;
-        __classPrivateFieldSet(this, _listener, this.emitter && this.event ? (this.once ? this._runOnce.bind(this) : this._run.bind(this)) : null);
+        tslib_1.__classPrivateFieldSet(this, _listener, this.emitter && this.event ? (this.once ? this._runOnce.bind(this) : this._run.bind(this)) : null);
     }
     onLoad() {
-        if (__classPrivateFieldGet(this, _listener))
-            this.emitter[this.once ? 'once' : 'on'](this.event, __classPrivateFieldGet(this, _listener));
+        if (tslib_1.__classPrivateFieldGet(this, _listener))
+            this.emitter[this.once ? 'once' : 'on'](this.event, tslib_1.__classPrivateFieldGet(this, _listener));
     }
     onUnload() {
-        if (!this.once && __classPrivateFieldGet(this, _listener))
-            this.emitter.off(this.event, __classPrivateFieldGet(this, _listener));
+        if (!this.once && tslib_1.__classPrivateFieldGet(this, _listener))
+            this.emitter.off(this.event, tslib_1.__classPrivateFieldGet(this, _listener));
     }
     toJSON() {
         return {
