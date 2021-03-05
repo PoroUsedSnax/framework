@@ -9,7 +9,7 @@ class CoreEvent extends Event_1.Event {
     }
     run(error, context) {
         const { name, event, path } = context.piece;
-        this.context.logger.error(`Encountered error on event listener "${name}" for event "${event}" at path "${path}"`, error.stack);
+        this.context.logger.error(`Encountered error on event listener "${name}" for event "${event}" at path "${path}"`, error);
     }
 }
 exports.CoreEvent = CoreEvent;
