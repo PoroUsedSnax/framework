@@ -2,7 +2,8 @@
 import { Awaited, PieceOptions, Piece, PieceContext, AliasPiece, AliasPieceOptions, AliasStore, Store } from '@sapphire/pieces';
 export { AliasPiece, AliasPieceOptions, AliasStore, Awaited, LoaderError, MissingExportsError, Piece, PieceContext, PieceOptions, Store, StoreOptions } from '@sapphire/pieces';
 import { Message, Collection, CategoryChannel, Channel, DMChannel, GuildChannel, GuildMember, NewsChannel, Role, TextChannel, User, VoiceChannel, ClientOptions, ClientEvents, Client, PermissionResolvable } from 'discord.js';
-import { Ok as Ok$1, Err as Err$1, UnorderedStrategy, Lexer, option, Args as Args$1 } from 'lexure';
+import * as Lexure from 'lexure';
+import { option } from 'lexure';
 import { URL } from 'url';
 import Collection$1 from '@discordjs/collection';
 import { EventEmitter } from 'events';
@@ -63,12 +64,12 @@ declare type Result<T, E> = Ok<T> | Err<E>;
  * The computation is successful.
  * @typeparam T Type of results.
  */
-declare type Ok<T> = Ok$1<T>;
+declare type Ok<T> = Lexure.Ok<T>;
 /**
  * The computation failed.
  * @typeparam E Type of errors.
  */
-declare type Err<E> = Err$1<E>;
+declare type Err<E> = Lexure.Err<E>;
 /**
  * Creates an Ok with no value.
  * @return A successful Result.
@@ -461,13 +462,13 @@ declare abstract class Command<T = Args> extends AliasPiece {
      * The strategy to use for the lexer.
      * @since 1.0.0
      */
-    strategy: UnorderedStrategy;
+    strategy: Lexure.UnorderedStrategy;
     /**
      * The lexer to be used for command parsing
      * @since 1.0.0
      * @private
      */
-    protected lexer: Lexer;
+    protected lexer: Lexure.Lexer;
     /**
      * @since 1.0.0
      * @param context The context.
@@ -649,14 +650,14 @@ declare class Args {
     /**
      * The internal Lexure parser.
      */
-    protected readonly parser: Args$1;
+    protected readonly parser: Lexure.Args;
     /**
      * The states stored in the args.
      * @see Args#save
      * @see Args#restore
      */
     private readonly states;
-    constructor(message: Message, command: Command, parser: Args$1, context: CommandContext);
+    constructor(message: Message, command: Command, parser: Lexure.Args, context: CommandContext);
     /**
      * Sets the parser to the first token.
      */
