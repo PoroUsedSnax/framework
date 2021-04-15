@@ -870,7 +870,7 @@ declare class Args {
      * @param type The function, custom argument, or argument name.
      * @wxample
      * ```typescript
-     * // !reverseandscreamfirst sapphire project
+     * // !reverseandscreamfirst sapphire community
      * const resolver = Args.make((arg) => ok(arg.split('').reverse().join('')));
      *
      * const peekedWord = await args.peekResult(resolver);
