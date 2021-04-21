@@ -1,4 +1,4 @@
-/* Version: 1.0.0 - April 21, 2021 13:26:56 */
+/* Version: 1.0.1 - April 21, 2021 13:27:27 */
 'use strict';
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -43,4 +43,4 @@ tslib_1.__exportStar(require("./lib/utils/preconditions/containers/PermissionsPr
 tslib_1.__exportStar(require("./lib/utils/preconditions/IPreconditionContainer"), exports);
 tslib_1.__exportStar(require("./lib/utils/preconditions/PreconditionContainerArray"), exports);
 tslib_1.__exportStar(require("./lib/utils/preconditions/PreconditionContainerSingle"), exports);
-exports.version = '1.0.0';
+exports.version = '1.0.1';
