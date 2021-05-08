@@ -10,7 +10,7 @@ class CoreEvent extends Event_1.Event {
     async run(payload) {
         const { message, command } = payload;
         // Run global preconditions:
-        const globalResult = await this.context.stores.get('preconditions').run(message, command, payload);
+        const globalResult = await this.container.stores.get('preconditions').run(message, command, payload);
         if (!globalResult.success) {
             message.client.emit(Events_1.Events.CommandDenied, globalResult.error, payload);
             return;

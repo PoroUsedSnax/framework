@@ -9,7 +9,7 @@ class CoreEvent extends Event_1.Event {
     }
     run(error, context) {
         const { name, path } = context.piece;
-        this.context.logger.error(`Encountered error on command "${name}" at path "${path}"`, error);
+        this.container.logger.error(`Encountered error on command "${name}" at path "${path}"`, error);
     }
 }
 exports.CoreEvent = CoreEvent;

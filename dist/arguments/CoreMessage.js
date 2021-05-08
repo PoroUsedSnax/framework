@@ -31,7 +31,7 @@ class CoreArgument extends Argument_1.Argument {
         if (!matches)
             return null;
         const [, guildID, channelID, messageID] = matches;
-        const guild = this.context.client.guilds.cache.get(guildID);
+        const guild = this.container.client.guilds.cache.get(guildID);
         if (guild !== message.guild)
             return null;
         const channel = guild.channels.cache.get(channelID);

@@ -10,7 +10,7 @@ class CoreEvent extends Event_1.Event {
     run() {
         var _a, _b, _c;
         var _d;
-        (_a = (_d = this.context.client).id) !== null && _a !== void 0 ? _a : (_d.id = (_c = (_b = this.context.client.user) === null || _b === void 0 ? void 0 : _b.id) !== null && _c !== void 0 ? _c : null);
+        (_a = (_d = this.container.client).id) !== null && _a !== void 0 ? _a : (_d.id = (_c = (_b = this.container.client.user) === null || _b === void 0 ? void 0 : _b.id) !== null && _c !== void 0 ? _c : null);
     }
 }
 exports.CoreEvent = CoreEvent;

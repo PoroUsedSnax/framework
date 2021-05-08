@@ -16,7 +16,7 @@ class CoreEvent extends Event_1.Event {
             return;
         let prefix = null;
         const mentionPrefix = this.getMentionPrefix(message.content);
-        const { client } = this.context;
+        const { client } = this.container;
         const { regexPrefix } = client.options;
         if (mentionPrefix) {
             if (message.content.length === mentionPrefix.length) {
@@ -48,7 +48,7 @@ class CoreEvent extends Event_1.Event {
         return channel.permissionsFor(me).has(this.requiredPermissions, false);
     }
     getMentionPrefix(content) {
-        const { id } = this.context.client;
+        const { id } = this.container.client;
         // If no client ID was specified, return null:
         if (!id)
             return null;
@@ -72,7 +72,7 @@ class CoreEvent extends Event_1.Event {
         var _a;
         if (prefixes === null)
             return null;
-        const { caseInsensitivePrefixes } = this.context.client.options;
+        const { caseInsensitivePrefixes } = this.container.client.options;
         if (caseInsensitivePrefixes)
             content = content.toLowerCase();
         if (typeof prefixes === 'string') {

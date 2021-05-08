@@ -1,12 +1,13 @@
-/* Version: 1.0.2 - May 8, 2021 19:49:54 */
+/* Version: 1.0.2 - May 8, 2021 19:55:37 */
 'use strict';
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.version = exports.Store = exports.Piece = exports.MissingExportsError = exports.LoaderError = exports.AliasStore = exports.AliasPiece = void 0;
+exports.version = exports.Store = exports.Piece = exports.MissingExportsError = exports.LoaderError = exports.container = exports.AliasStore = exports.AliasPiece = void 0;
 const tslib_1 = require("tslib");
 var pieces_1 = require("@sapphire/pieces");
 Object.defineProperty(exports, "AliasPiece", { enumerable: true, get: function () { return pieces_1.AliasPiece; } });
 Object.defineProperty(exports, "AliasStore", { enumerable: true, get: function () { return pieces_1.AliasStore; } });
+Object.defineProperty(exports, "container", { enumerable: true, get: function () { return pieces_1.container; } });
 Object.defineProperty(exports, "LoaderError", { enumerable: true, get: function () { return pieces_1.LoaderError; } });
 Object.defineProperty(exports, "MissingExportsError", { enumerable: true, get: function () { return pieces_1.MissingExportsError; } });
 Object.defineProperty(exports, "Piece", { enumerable: true, get: function () { return pieces_1.Piece; } });

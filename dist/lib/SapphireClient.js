@@ -67,15 +67,15 @@ class SapphireClient extends discord_js_1.Client {
          * @since 1.0.0
          */
         this.id = null;
-        pieces_1.Store.injectedContext.client = this;
+        pieces_1.container.client = this;
         for (const plugin of SapphireClient.plugins.values("preGenericsInitialization" /* PreGenericsInitialization */)) {
             plugin.hook.call(this, options);
             this.emit(Events_1.Events.PluginLoaded, plugin.type, plugin.name);
         }
         this.logger = (_b = (_a = options.logger) === null || _a === void 0 ? void 0 : _a.instance) !== null && _b !== void 0 ? _b : new Logger_1.Logger((_d = (_c = options.logger) === null || _c === void 0 ? void 0 : _c.level) !== null && _d !== void 0 ? _d : 30 /* Info */);
-        pieces_1.Store.injectedContext.logger = this.logger;
+        pieces_1.container.logger = this.logger;
         this.stores = new StoreRegistry_1.StoreRegistry();
-        pieces_1.Store.injectedContext.stores = this.stores;
+        pieces_1.container.stores = this.stores;
         this.fetchPrefix = (_e = options.fetchPrefix) !== null && _e !== void 0 ? _e : (() => { var _a; return (_a = this.options.defaultPrefix) !== null && _a !== void 0 ? _a : null; });
         for (const plugin of SapphireClient.plugins.values("preInitialization" /* PreInitialization */)) {
             plugin.hook.call(this, options);

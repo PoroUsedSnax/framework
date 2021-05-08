@@ -240,7 +240,7 @@ class Args {
     resolveArgument(arg) {
         if (typeof arg === 'object')
             return arg;
-        return pieces_1.Store.injectedContext.stores.get('arguments').get(arg);
+        return pieces_1.container.stores.get('arguments').get(arg);
     }
     /**
      * Converts a callback into an usable argument.

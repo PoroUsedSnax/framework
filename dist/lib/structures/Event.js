@@ -52,8 +52,8 @@ class Event extends pieces_1.Piece {
         _listener.set(this, void 0);
         this.emitter =
             typeof options.emitter === 'undefined'
-                ? this.context.client
-                : (_a = (typeof options.emitter === 'string' ? Reflect.get(this.context.client, options.emitter) : options.emitter)) !== null && _a !== void 0 ? _a : null;
+                ? this.container.client
+                : (_a = (typeof options.emitter === 'string' ? Reflect.get(this.container.client, options.emitter) : options.emitter)) !== null && _a !== void 0 ? _a : null;
         this.event = (_b = options.event) !== null && _b !== void 0 ? _b : this.name;
         this.once = (_c = options.once) !== null && _c !== void 0 ? _c : false;
         tslib_1.__classPrivateFieldSet(this, _listener, this.emitter && this.event ? (this.once ? this._runOnce.bind(this) : this._run.bind(this)) : null);
@@ -78,7 +78,7 @@ class Event extends pieces_1.Piece {
             await this.run(...args);
         }
         catch (error) {
-            this.context.client.emit(Events_1.Events.EventError, error, { piece: this });
+            this.container.client.emit(Events_1.Events.EventError, error, { piece: this });
         }
     }
     async _runOnce(...args) {

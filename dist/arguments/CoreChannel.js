@@ -7,7 +7,7 @@ class CoreArgument extends Argument_1.Argument {
         super(context, { name: 'channel' });
     }
     run(parameter, context) {
-        const channel = (context.message.guild ? context.message.guild.channels : this.context.client.channels).cache.get(parameter);
+        const channel = (context.message.guild ? context.message.guild.channels : this.container.client.channels).cache.get(parameter);
         return channel
             ? this.ok(channel)
             : this.error({

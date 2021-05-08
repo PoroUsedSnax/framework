@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { Awaited, PieceOptions, Piece, PieceContext, AliasPiece, AliasPieceOptions, AliasStore, Store } from '@sapphire/pieces';
-export { AliasPiece, AliasPieceOptions, AliasStore, Awaited, LoaderError, MissingExportsError, Piece, PieceContext, PieceOptions, Store, StoreOptions } from '@sapphire/pieces';
+export { AliasPiece, AliasPieceOptions, AliasStore, Awaited, LoaderError, MissingExportsError, Piece, PieceContext, PieceOptions, Store, StoreOptions, container } from '@sapphire/pieces';
 import { Message, Collection, CategoryChannel, Channel, DMChannel, GuildChannel, GuildMember, NewsChannel, Role, TextChannel, User, VoiceChannel, ClientOptions, ClientEvents, Client, PermissionResolvable } from 'discord.js';
 import * as Lexure from 'lexure';
 import { option } from 'lexure';
@@ -1825,7 +1825,7 @@ declare module 'discord.js' {
     }
 }
 declare module '@sapphire/pieces' {
-    interface PieceContextExtras {
+    interface Container {
         client: SapphireClient;
         logger: ILogger;
         stores: StoreRegistry;

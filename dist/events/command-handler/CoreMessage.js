@@ -12,7 +12,7 @@ class CoreEvent extends Event_1.Event {
         if (message.author.bot || message.webhookID)
             return;
         // Run the message parser.
-        this.context.client.emit(Events_1.Events.PreMessageParsed, message);
+        this.container.client.emit(Events_1.Events.PreMessageParsed, message);
     }
 }
 exports.CoreEvent = CoreEvent;
