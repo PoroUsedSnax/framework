@@ -476,7 +476,7 @@ declare abstract class Command<T = Args> extends AliasPiece {
      */
     protected constructor(context: PieceContext, { name, ...options }?: CommandOptions);
     /**
-     * The pre-parse method. This method can be overriden by plugins to define their own argument parser.
+     * The pre-parse method. This method can be overridden by plugins to define their own argument parser.
      * @param message The message that triggered the command.
      * @param parameters The raw parameters as a single string.
      * @param context The command-context used in this execution.
@@ -492,6 +492,25 @@ declare abstract class Command<T = Args> extends AliasPiece {
      * Defines the JSON.stringify behavior of the command.
      */
     toJSON(): Record<string, any>;
+    protected resolveConstructorPreConditions(options: CommandOptions): readonly PreconditionEntryResolvable[];
+    private resolveConstructorPreConditionsRunType;
+}
+/**
+ * The allowed values for [[CommandOptions.runIn]].
+ * @since 2.0.0
+ */
+declare type CommandOptionsRunType = 'dm' | 'text' | 'news' | 'guild';
+/**
+ * The available command pre-conditions.
+ * @since 2.0.0
+ */
+declare const enum CommandPreConditions {
+    Cooldown = "Cooldown",
+    NotSafeForWork = "NSFW",
+    DirectMessageOnly = "DMOnly",
+    TextOnly = "TextOnly",
+    NewsOnly = "NewsOnly",
+    GuildOnly = "GuildOnly"
 }
 /**
  * The [[Command]] options.
@@ -522,7 +541,7 @@ interface CommandOptions extends AliasPieceOptions {
      * @since 1.0.0
      * @default []
      */
-    preconditions?: PreconditionArrayResolvable;
+    preconditions?: readonly PreconditionEntryResolvable[];
     /**
      * The options for the lexer strategy.
      * @since 1.0.0
@@ -540,6 +559,30 @@ interface CommandOptions extends AliasPieceOptions {
      * ]
      */
     quotes?: [string, string][];
+    /**
+     * Sets whether or not the command should be treated as NSFW. If set to true, the `NSFW` precondition will be added to the list.
+     * @since 2.0.0
+     * @default false
+     */
+    nsfw?: boolean;
+    /**
+     * Sets the bucket of the cool-down, if set to a non-zero value alongside {@link CommandOptions.cooldownDuration}, the `Cooldown` precondition will be added to the list.
+     * @since 2.0.0
+     * @default 1
+     */
+    cooldownBucket?: number;
+    /**
+     * Sets the duration of the tickets in the cool-down, if set to a non-zero value alongside {@link CommandOptions.cooldownBucket}, the `Cooldown` precondition will be added to the list.
+     * @since 2.0.0
+     * @default 0
+     */
+    cooldownDuration?: number;
+    /**
+     * The channels the command should run in. If set to `null`, no precondition entry will be added. Some optimizations are applied when given an array to reduce the amount of preconditions run (e.g. `'text'` and `'news'` becomes `'guild'`, and if both `'dm'` and `'guild'` are defined, then no precondition entry is added as it runs in all channels).
+     * @since 2.0.0
+     * @default null
+     */
+    runIn?: CommandOptionsRunType | readonly CommandOptionsRunType[] | null;
 }
 interface CommandContext extends Record<PropertyKey, unknown> {
     /**
@@ -1331,8 +1374,10 @@ declare const enum Identifiers {
     PreconditionCooldown = "preconditionCooldown",
     PreconditionDMOnly = "preconditionDmOnly",
     PreconditionGuildOnly = "preconditionGuildOnly",
+    PreconditionNewsOnly = "preconditionNewsOnly",
     PreconditionNSFW = "preconditionNsfw",
-    PreconditionPermissions = "preconditionPermissions"
+    PreconditionPermissions = "preconditionPermissions",
+    PreconditionTextOnly = "preconditionTextOnly"
 }
 
 declare const enum CooldownLevel {
@@ -2110,4 +2155,4 @@ declare class PermissionsPrecondition implements PreconditionSingleResolvableDet
 
 declare const version = "[VI]{version}[/VI]";
 
-export { ArgOptions, ArgType, Args, ArgsNextCallback, Argument, ArgumentContext, ArgumentError, ArgumentOptions, ArgumentResult, ArgumentStore, AsyncArgumentResult, AsyncPluginHooks, AsyncPreconditionContainerReturn, AsyncPreconditionResult, BucketType, ClientLoggerOptions, Command, CommandAcceptedPayload, CommandContext, CommandDeniedPayload, CommandErrorPayload, CommandFinishPayload, CommandOptions, CommandRunPayload, CommandStore, CommandSuccessPayload, CooldownLevel, Err, Event, EventErrorPayload, EventOptions, EventStore, Events, ExtendedArgument, ExtendedArgumentContext, ExtendedArgumentOptions, IArgument, ICommandPayload, ILogger, IPieceError, IPreconditionCondition, IPreconditionContainer, Identifiers, LogLevel, LogMethods, Logger, Maybe, None, Ok, PermissionsPrecondition, Plugin, PluginHook, PluginManager, PreCommandRunPayload, Precondition, PreconditionArrayResolvable, PreconditionArrayResolvableDetails, PreconditionConditionAnd, PreconditionConditionOr, PreconditionContainerArray, PreconditionContainerResult, PreconditionContainerReturn, PreconditionContainerSingle, PreconditionContext, PreconditionEntryResolvable, PreconditionError, PreconditionOptions, PreconditionResult, PreconditionRunCondition, PreconditionRunMode, PreconditionSingleResolvable, PreconditionSingleResolvableDetails, PreconditionStore, RepeatArgOptions, Result, SapphireClient, SapphireClientOptions, SapphirePluginAsyncHook, SapphirePluginHook, SapphirePluginHookEntry, SapphirePrefix, SapphirePrefixHook, Some, StoreRegistry, StoreRegistryEntries, SyncPluginHooks, UnknownCommandNamePayload, UnknownCommandPayload, UserError, err, isErr, isMaybe, isNone, isOk, isSome, maybe, none, ok, postInitialization, postLogin, preGenericsInitialization, preInitialization, preLogin, some, version };
+export { ArgOptions, ArgType, Args, ArgsNextCallback, Argument, ArgumentContext, ArgumentError, ArgumentOptions, ArgumentResult, ArgumentStore, AsyncArgumentResult, AsyncPluginHooks, AsyncPreconditionContainerReturn, AsyncPreconditionResult, BucketType, ClientLoggerOptions, Command, CommandAcceptedPayload, CommandContext, CommandDeniedPayload, CommandErrorPayload, CommandFinishPayload, CommandOptions, CommandOptionsRunType, CommandPreConditions, CommandRunPayload, CommandStore, CommandSuccessPayload, CooldownLevel, Err, Event, EventErrorPayload, EventOptions, EventStore, Events, ExtendedArgument, ExtendedArgumentContext, ExtendedArgumentOptions, IArgument, ICommandPayload, ILogger, IPieceError, IPreconditionCondition, IPreconditionContainer, Identifiers, LogLevel, LogMethods, Logger, Maybe, None, Ok, PermissionsPrecondition, Plugin, PluginHook, PluginManager, PreCommandRunPayload, Precondition, PreconditionArrayResolvable, PreconditionArrayResolvableDetails, PreconditionConditionAnd, PreconditionConditionOr, PreconditionContainerArray, PreconditionContainerResult, PreconditionContainerReturn, PreconditionContainerSingle, PreconditionContext, PreconditionEntryResolvable, PreconditionError, PreconditionOptions, PreconditionResult, PreconditionRunCondition, PreconditionRunMode, PreconditionSingleResolvable, PreconditionSingleResolvableDetails, PreconditionStore, RepeatArgOptions, Result, SapphireClient, SapphireClientOptions, SapphirePluginAsyncHook, SapphirePluginHook, SapphirePluginHookEntry, SapphirePrefix, SapphirePrefixHook, Some, StoreRegistry, StoreRegistryEntries, SyncPluginHooks, UnknownCommandNamePayload, UnknownCommandPayload, UserError, err, isErr, isMaybe, isNone, isOk, isSome, maybe, none, ok, postInitialization, postLogin, preGenericsInitialization, preInitialization, preLogin, some, version };

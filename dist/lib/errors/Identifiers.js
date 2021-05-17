@@ -39,7 +39,9 @@ var Identifiers;
     Identifiers["PreconditionCooldown"] = "preconditionCooldown";
     Identifiers["PreconditionDMOnly"] = "preconditionDmOnly";
     Identifiers["PreconditionGuildOnly"] = "preconditionGuildOnly";
+    Identifiers["PreconditionNewsOnly"] = "preconditionNewsOnly";
     Identifiers["PreconditionNSFW"] = "preconditionNsfw";
     Identifiers["PreconditionPermissions"] = "preconditionPermissions";
+    Identifiers["PreconditionTextOnly"] = "preconditionTextOnly";
 })(Identifiers = exports.Identifiers || (exports.Identifiers = {}));
 //# sourceMappingURL=Identifiers.js.map
